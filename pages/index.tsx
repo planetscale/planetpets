@@ -21,10 +21,10 @@ export default function Home() {
           )}
           {user?.planetscaleToken && (
             <div style={{ fontWeight: 'bold', position: 'absolute', bottom: 50, left: 250 }}>
-              Which garden(organization) should we visit today?
+              We should probably <a href='play' target='_blank'>check on the gardens...</a>
             </div>
           )}
-          </div>
+        </div>
     </Layout>
   )
 }
