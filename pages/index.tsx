@@ -8,8 +8,6 @@ export default function Home() {
     redirectTo: '/login',
   })
 
-  const [organizations, setOrganizations] = useState([])
-
   return (
     <Layout>
         <div>
