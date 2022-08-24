@@ -62,7 +62,6 @@ const Play: React.FC = () => {
           setDatabases([])
         }
       }
-
       else {
         gateRefs.forEach((g, i) => {
           if (intersect(g.current as PixiSprite, lilman.current as PixiSprite)) {
@@ -72,7 +71,7 @@ const Play: React.FC = () => {
         })
       }
     }
-  }, [currentOrganization])
+  })
 
   function intersect(a: PixiSprite, b: PixiSprite) {
     if (!a || !b) {
