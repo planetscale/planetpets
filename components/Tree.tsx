@@ -1,19 +1,23 @@
-import { Container, Sprite, Text } from '@inlet/react-pixi'
-import React from 'react'
+import { Container, Sprite, Text, useApp , PixiComponent } from '@inlet/react-pixi'
+import React, { forwardRef } from 'react'
+import { Sprite as PixiSprite, Container as PixiContainer, Text as PixiText } from 'pixi.js'
 import { Database } from '../utils/types'
 import { textStyles } from '../lib/utils'
+import ResponseCache from 'next/dist/server/response-cache'
 
 interface Props {
   x: number
   y: number
   database: Database
+  innerRef: React.ForwardedRef<PixiSprite>
 }
 
 const baseHeight = 74
 const branchHeight = 33
-const Tree: React.FC<Props> = ({ database, x, y }) => {
+
+const PixiTree: React.FC<Props> = ({ database, x, y, innerRef }) => {
   return (
-    <Container x={x} y={y} anchor={0.5} scale={0.75} zIndex={0}>
+    <Container x={x} y={y} anchor={0.5} scale={0.75} zIndex={0} ref={innerRef}>
       <Text text={database.name} x={0} y={70} anchor={0.5} style={textStyles} />
       <Sprite image='baseplant@2x.png' x={0} y={0} anchor={0.5}/>
       {Array.from(Array(database.branch_count - 1).keys()).map((i) => { 
@@ -23,5 +27,10 @@ const Tree: React.FC<Props> = ({ database, x, y }) => {
     </Container>
   )
 }
+
+const Tree = forwardRef<PixiSprite, any>((props, ref) => {
+  const app = useApp();
+  return <PixiTree x={props.x} y={props.y} innerRef={ref} database={props.database} />
+})
 
 export default Tree

@@ -1,30 +1,30 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Sprite, useApp, Text, useTick} from '@inlet/react-pixi'
+import React, { createRef, useEffect, useRef, useState } from 'react'
+import { Sprite, useApp, Text, useTick, PixiRef, _ReactPixi} from '@inlet/react-pixi'
 import { keyboard, textStyles } from 'lib/utils'
 import WateringCan from './WateringCan'
 
 interface Props {
   currentUser: string
+  wateringCan: React.MutableRefObject<PixiRef<typeof Sprite> | undefined>
+  watering: boolean
 }
 
-const LilMan: React.FC<Props> = ({ currentUser }) => {
+const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering }) => {
   const app = useApp()
-
   const [x, setX] = useState(app.screen.width / 2)
   const [y, setY] = useState(app.screen.height / 2)
   const [image, setImage] = useState('lilman_center@2x.png')
-  const [watering, setWatering] = useState(false)
 
   const vx = useRef(0)
   const vy = useRef(0)
   const [phrase, setPhrase] = useState<string>()
+ 
   useEffect(() => {
     //Capture the keyboard arrow keys
     const left = keyboard("ArrowLeft"),
     up = keyboard("ArrowUp"),
     right = keyboard("ArrowRight"),
-    down = keyboard("ArrowDown"),
-    water = keyboard("a");
+    down = keyboard("ArrowDown");
 
     //Left arrow key `press` method
     left.press = () => {
@@ -81,13 +81,6 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
         vy.current = 0
       }
     };
-
-    water.press = () => {
-      setWatering(true)
-    }
-    water.release = () => {
-      setWatering(false)
-    }
   }, [])
 
   useTick((delta) => {
@@ -111,7 +104,7 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
     zIndex={100}
   >
     {phrase && <Text x={50} y={-50} text={phrase} style={textStyles}/>}
-    {watering && <WateringCan />}
+    {watering &&  <WateringCan ref={wateringCan}/>}
   </Sprite>
 }
 
