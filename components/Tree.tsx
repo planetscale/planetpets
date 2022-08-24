@@ -13,7 +13,7 @@ const baseHeight = 74
 const branchHeight = 33
 const Tree: React.FC<Props> = ({ database, x, y }) => {
   return (
-    <Container x={x} y={y} anchor={0.5} scale={0.75}>
+    <Container x={x} y={y} anchor={0.5} scale={0.75} zIndex={0}>
       <Text text={database.name} x={0} y={70} anchor={0.5} style={textStyles} />
       <Sprite image='baseplant@2x.png' x={0} y={0} anchor={0.5}/>
       {Array.from(Array(database.branch_count - 1).keys()).map((i) => { 

@@ -1,12 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Sprite, useApp, Text, useTick} from '@inlet/react-pixi'
-import { keyboard } from 'lib/utils'
+import { keyboard, textStyles } from 'lib/utils'
+import WateringCan from './WateringCan'
 
-const textStyles = {
-  fontFamily: 'Courier',
-  fontSize: 16,
-  fontWeight: 'bold'
-}
 interface Props {
   currentUser: string
 }
@@ -17,6 +13,7 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
   const [x, setX] = useState(app.screen.width / 2)
   const [y, setY] = useState(app.screen.height / 2)
   const [image, setImage] = useState('lilman_center@2x.png')
+  const [watering, setWatering] = useState(false)
 
   const vx = useRef(0)
   const vy = useRef(0)
@@ -26,7 +23,8 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
     const left = keyboard("ArrowLeft"),
     up = keyboard("ArrowUp"),
     right = keyboard("ArrowRight"),
-    down = keyboard("ArrowDown");
+    down = keyboard("ArrowDown"),
+    water = keyboard("a");
 
     //Left arrow key `press` method
     left.press = () => {
@@ -83,6 +81,13 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
         vy.current = 0
       }
     };
+
+    water.press = () => {
+      setWatering(true)
+    }
+    water.release = () => {
+      setWatering(false)
+    }
   }, [])
 
   useTick((delta) => {
@@ -103,8 +108,10 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
       setPhrase(`Hi ${currentUser || 'Frances'}...`)
       setTimeout(() => { setPhrase(undefined) }, 1000)
     }}
+    zIndex={100}
   >
     {phrase && <Text x={50} y={-50} text={phrase} style={textStyles}/>}
+    {watering && <WateringCan />}
   </Sprite>
 }
 
