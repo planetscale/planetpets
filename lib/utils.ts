@@ -47,3 +47,14 @@ export function keyboard(value: string) {
   
   return key
 }
+
+export interface Database {
+  name: string
+  branch_count: string
+}
+
+export const textStyles = {
+  fontFamily: 'Courier',
+  fontSize: 16,
+  fontWeight: 'bold'
+}
