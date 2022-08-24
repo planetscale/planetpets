@@ -1,18 +1,24 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, forwardRef } from 'react'
 import { Sprite, useApp, Text, useTick, PixiRef, _ReactPixi} from '@inlet/react-pixi'
 import { keyboard, textStyles } from 'lib/utils'
 import WateringCan from './WateringCan'
+import { Sprite as PixiSprite } from 'pixi.js'
 
 interface Props {
   currentUser: string
   wateringCan: React.MutableRefObject<PixiRef<typeof Sprite> | undefined>
   watering: boolean
+  innerRef: any
 }
 
-const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering }) => {
+export const RefLilMan = forwardRef<PixiSprite, any>((props, ref) => {
+  return <LilMan innerRef={ref} {...props} />
+})
+
+const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering, innerRef }) => {
   const app = useApp()
   const [x, setX] = useState(app.screen.width / 2)
-  const [y, setY] = useState(app.screen.height / 2)
+  const [y, setY] = useState(300)
   const [image, setImage] = useState('lilman_center@2x.png')
 
   const vx = useRef(0)
@@ -102,6 +108,7 @@ const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering }) => {
       setTimeout(() => { setPhrase(undefined) }, 1000)
     }}
     zIndex={100}
+    ref={innerRef}
   >
     {phrase && <Text x={50} y={-50} text={phrase} style={textStyles}/>}
     {watering &&  <WateringCan ref={wateringCan}/>}

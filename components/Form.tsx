@@ -10,7 +10,7 @@ export default function Form({
   return (
     <form onSubmit={onSubmit}>
       <label>
-        <span>Type your GitHub username</span>
+        <span>Type your GitHub username...</span>
         <input type="text" name="username" required />
       </label>
 
@@ -32,10 +32,20 @@ export default function Form({
           margin: 0.3rem 0 1rem;
           border: 1px solid #ccc;
           border-radius: 4px;
+          font-family: Courier;
+          outline-color: #2AB14C;
         }
         .error {
           color: brown;
           margin: 1rem 0 0;
+        }
+        button {
+          padding: 8px;
+          background-color: #2AB14C;
+          box-shadow: none;
+          outline: none;
+          border: none;
+          font-family: Courier;
         }
       `}</style>
     </form>

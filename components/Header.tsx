@@ -27,33 +27,6 @@ export default function Header() {
           {user?.isLoggedIn === true && (
             <>
               <li>
-                <Link href="/profile-sg">
-                  <a>
-                    <span
-                      style={{
-                        marginRight: '.3em',
-                        verticalAlign: 'middle',
-                        borderRadius: '100%',
-                        overflow: 'hidden',
-                      }}
-                    >
-                      <Image
-                        src={user.avatarUrl}
-                        width={32}
-                        height={32}
-                        alt=""
-                      />
-                    </span>
-                    Profile (Static Generation, recommended)
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href="/profile-ssr">
-                  <a>Profile (Server-side Rendering)</a>
-                </Link>
-              </li>
-              <li>
                 <a
                   href="/api/logout"
                   onClick={async (e) => {
@@ -68,18 +41,25 @@ export default function Header() {
                   Logout
                 </a>
               </li>
+              <li>
+                <span
+                  style={{
+                    marginRight: '.3em',
+                    verticalAlign: 'middle',
+                    borderRadius: '100%',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <Image
+                    src={user.avatarUrl}
+                    width={32}
+                    height={32}
+                    alt=""
+                  />
+                </span>
+              </li>
             </>
           )}
-          <li>
-            <a href="https://github.com/vvo/iron-session">
-              <Image
-                src="/GitHub-Mark-Light-32px.png"
-                width="32"
-                height="32"
-                alt=""
-              />
-            </a>
-          </li>
         </ul>
       </nav>
       <style jsx>{`
@@ -100,7 +80,6 @@ export default function Header() {
         }
 
         a {
-          color: #fff;
           text-decoration: none;
           display: flex;
           align-items: center;
@@ -112,8 +91,6 @@ export default function Header() {
 
         header {
           padding: 0.2rem;
-          color: #fff;
-          background-color: #333;
         }
       `}</style>
     </header>

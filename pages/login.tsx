@@ -7,7 +7,7 @@ import fetchJson, { FetchError } from 'lib/fetchJson'
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
   const { mutateUser } = useUser({
-    redirectTo: '/profile-sg',
+    redirectTo: '/play',
     redirectIfFound: true,
   })
 
@@ -16,6 +16,10 @@ export default function Login() {
   return (
     <Layout>
       <div className="login">
+        <div id='images'>
+          <img src='title@2x.png' />
+          <img src='green_lilman@2x.png'/>
+        </div>
         <Form
           errorMessage={errorMsg}
           onSubmit={async function handleSubmit(event) {
@@ -45,11 +49,24 @@ export default function Login() {
       </div>
       <style jsx>{`
         .login {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
           max-width: 21rem;
           margin: 0 auto;
           padding: 1rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
+        }
+
+        #images {
+          display: flex;
+          flex-direction: column;
+        }
+
+        #images.img {
+          flex-grow: 0;
+          flex-shrink: 0;
+          max-width: 100px;
         }
       `}</style>
     </Layout>
