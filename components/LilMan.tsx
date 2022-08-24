@@ -1,77 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Sprite, useApp, Text, useTick} from '@inlet/react-pixi'
-import { Key } from '../utils/types'
+import { keyboard } from 'lib/utils'
 
 const textStyles = {
   fontFamily: 'Courier',
   fontSize: 16,
   fontWeight: 'bold'
 }
-
-function keyboard(value: string) {
-  const key: Key = {
-    value: value,
-    isDown: false,
-    isUp: true,
-    press: undefined,
-    release: undefined
-  };
-  
-  //The `downHandler`
-  key.downHandler = (event: KeyboardEvent) => {
-    if (event.key === key.value) {
-      if (key.isUp && key.press) {
-        key.press();
-      }
-      key.isDown = true;
-      key.isUp = false;
-      event.preventDefault();
-    }
-  };
-
-  //The `upHandler`
-  key.upHandler = (event: KeyboardEvent) => {
-    if (event.key === key.value) {
-      if (key.isDown && key.release) {
-        key.release();
-      }
-      key.isDown = false;
-      key.isUp = true;
-      event.preventDefault();
-    }
-  };
-
-  //Attach event listeners
-  const downListener = key.downHandler.bind(key);
-  const upListener = key.upHandler.bind(key);
-  
-  window.addEventListener("keydown", downListener, false);
-  window.addEventListener("keyup", upListener, false);
-  
-  // Detach event listeners
-  key.unsubscribe = () => {
-    window.removeEventListener("keydown", downListener);
-    window.removeEventListener("keyup", upListener);
-  };
-  
-  return key
-}
-
 interface Props {
   currentUser: string
 }
 
 const LilMan: React.FC<Props> = ({ currentUser }) => {
-  const [vx, setVx] = useState(0)
-  const [vy, setVy] = useState(0)
-
   const app = useApp()
 
   const [x, setX] = useState(app.screen.width / 2)
   const [y, setY] = useState(app.screen.height / 2)
   const [image, setImage] = useState('lilman_center@2x.png')
+
+  const vx = useRef(0)
+  const vy = useRef(0)
   const [phrase, setPhrase] = useState<string>()
-  console.log("LOCKED INTO ", x, y)
   useEffect(() => {
     //Capture the keyboard arrow keys
     const left = keyboard("ArrowLeft"),
@@ -83,8 +32,8 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
     left.press = () => {
       setImage('lilman_left@2x.png')
       //Change the lilman's velocity when the key is pressed
-      setVx(-5)
-      setVy(0)
+      vx.current = -5
+      vy.current = 0
     };
 
     //Left arrow key `release` method
@@ -92,8 +41,8 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
       //If the left arrow has been released, and the right arrow isn't down,
       //and the lilman isn't moving vertically:
       //Stop the lilman
-      if (!right.isDown && vy === 0) {
-        setVx(0)
+      if (!right.isDown && vy.current === 0) {
+        vx.current = 0
         setImage('lilman_center@2x.png')
       }
     };
@@ -101,24 +50,24 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
     //Up
     up.press = () => {
       setImage('lilman_center@2x.png')
-      setVy(-5)
-      setVx(0)
+      vy.current = -5
+      vx.current = 0
     };
     up.release = () => {
-      if (!down.isDown && vx === 0) {
-        setVy(0)
+      if (!down.isDown && vx.current === 0) {
+        vy.current = 0
       }
     };
 
     //Right
     right.press = () => {
       setImage('lilman_right@2x.png')
-      setVx(5)
-      setVy(0)
+      vx.current = 5
+      vy.current = 0
     };
     right.release = () => {
-      if (!left.isDown && vy === 0) {
-        setVx(0)
+      if (!left.isDown && vy.current === 0) {
+        vx.current = 0
         setImage('lilman_center@2x.png')
       }
     };
@@ -126,28 +75,26 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
     //Down
     down.press = () => {
       setImage('lilman_center@2x.png')
-      setVy(5)
-      setVx(0)
+      vy.current = 5
+      vx.current = 0
     };
     down.release = () => {
-      if (!up.isDown && vx === 0) {
-        setVy(0)
+      if (!up.isDown && vx.current === 0) {
+        vy.current = 0
       }
     };
-  }, [vx, vy])
+  }, [])
 
-  useTick((delta) => (delta: number) => {
-      
+  useTick((delta) => {
     //Use the lilman's velocity to make it move
-    setX(x + vx)
-    setY(y + vy)
+    setX(x + vx.current)
+    setY(y + vy.current)
   })
 
-  console.log("APP", app)
   return <Sprite 
     image={image}
     anchor={0.5}
-    scale={.5}
+    scale={.8}
     x={x}
     y={y}
     interactive={true}
@@ -157,7 +104,7 @@ const LilMan: React.FC<Props> = ({ currentUser }) => {
       setTimeout(() => { setPhrase(undefined) }, 1000)
     }}
   >
-    {phrase && <Text x={50} y={-50} text={phrase} {...textStyles}/>}
+    {phrase && <Text x={50} y={-50} text={phrase} style={textStyles}/>}
   </Sprite>
 }
 
