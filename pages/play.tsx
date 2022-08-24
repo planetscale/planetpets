@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js'
 import { EventSystem } from '@pixi/events';
 import { useEffect, useState } from 'react'
 import { SpriteMaskFilter } from 'pixi.js';
+import { Database } from 'utils/types';
 
 delete PIXI.Renderer.__plugins.interaction
 
@@ -76,7 +77,7 @@ export default function Home() {
   const [lilMan, setLilMan] = useState<PIXI.Sprite | undefined>(undefined)
   const [pixiApp, setPixiApp] = useState<PIXI.Application|undefined>(undefined)
   const [currentUser, setCurrentUser] = useState<string>('Frances')
-
+  const [databases, setDatabases] = useState<Database[]>([{ name: 'Production', branch_count: 3 }, { name: 'Developement', branch_count: 1 }])
   console.log(lilMan, pixiApp, currentUser)
 
   useEffect(() => {
@@ -122,7 +123,7 @@ export default function Home() {
         // Shows hand cursor
         lilman.buttonMode = true;
         lilman.on('pointerdown', () => { 
-          const phrase = new PIXI.Text(`Hi ${currentUser}!`, textStyles)
+          const phrase = new PIXI.Text(`Hi ${currentUser}...`, textStyles)
           phrase.y = -50
           phrase.x = 50
           lilman?.addChild(phrase)
@@ -218,7 +219,7 @@ export default function Home() {
       setup()
     }
   }, [])
-  
+
   return (
     <div >
       <Head>
