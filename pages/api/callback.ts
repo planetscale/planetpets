@@ -11,19 +11,21 @@ export type User = {
 }
 
 async function callbackRoute(req: NextApiRequest, res: NextApiResponse<User>) {
-  const queryObject = url.parse(req.url as string, true).query;
-  console.log(queryObject);
+  const { code } = url.parse(req.url as string, true).query;
+  let planetscaleToken: string | undefined = undefined
+
+  if (code) {
+    const tokenRes = await fetch(`${process.env.PLANETSCALE_API_URL}/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}`)
+    console.log(tokenRes)
+  }
+
   if (req.session.user) {
     // in a real world application you might read the user id from the session and then do a database request
     // to get more information on the user if needed
-    req.session.user = { ...req.session.user, planetscaleToken: queryObject.code as string}
+    req.session.user = { ...req.session.user, planetscaleToken }
     await req.session.save()
 
-    res.json({
-      ...req.session.user,
-      isLoggedIn: true,
-      planetscaleToken: queryObject.code as string
-    })
+    res.redirect(307, '/play')
   } else {
     res.json({
       isLoggedIn: false,

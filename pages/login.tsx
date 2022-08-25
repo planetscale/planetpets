@@ -7,7 +7,7 @@ import fetchJson, { FetchError } from 'lib/fetchJson'
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
   const { mutateUser } = useUser({
-    redirectTo: '/play',
+    redirectTo: '/',
     redirectIfFound: true,
   })
 
