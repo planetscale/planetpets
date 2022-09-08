@@ -1,6 +1,6 @@
 import { Sprite, Text, useApp , PixiComponent } from '@inlet/react-pixi'
 import React, { forwardRef } from 'react'
-import { Sprite as PixiSprite, Container as PixiContainer, Text as PixiText } from 'pixi.js'
+import { Sprite as PixiSprite, Container as PixiContainer, Text as PixiText, TextStyle } from 'pixi.js'
 import { textStyles } from '../lib/utils'
 
 interface Props {
@@ -16,7 +16,7 @@ const branchHeight = 33
 const PixiGate: React.FC<Props> = ({ name, x, y, innerRef }) => {
   return (
     <Sprite image='garden_door@2x.png' x={x} y={y} anchor={0.5} scale={0.75} zIndex={0} ref={innerRef}>
-      <Text text={name} x={0} y={70} anchor={0.5} style={textStyles} />
+      <Text text={name} x={0} y={70} anchor={0.5} style={textStyles as TextStyle} />
     </Sprite>
   )
 }

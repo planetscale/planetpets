@@ -1,5 +1,5 @@
 export interface Database {
-  branch_count: number
+  branches_count: number
   name: string
 }
 

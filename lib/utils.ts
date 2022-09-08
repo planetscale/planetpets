@@ -50,7 +50,7 @@ export function keyboard(value: string) {
 
 export interface Database {
   name: string
-  branch_count: string
+  branches_count: string
 }
 
 export const textStyles = {

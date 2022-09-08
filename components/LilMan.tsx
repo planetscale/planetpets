@@ -2,11 +2,11 @@ import React, { useEffect, useRef, useState, forwardRef } from 'react'
 import { Sprite, useApp, Text, useTick, PixiRef, _ReactPixi} from '@inlet/react-pixi'
 import { keyboard, textStyles } from 'lib/utils'
 import WateringCan from './WateringCan'
-import { Sprite as PixiSprite } from 'pixi.js'
+import { Sprite as PixiSprite, TextStyle } from 'pixi.js'
 
 interface Props {
   currentUser: string
-  wateringCan: React.MutableRefObject<PixiRef<typeof Sprite> | undefined>
+  wateringCan: React.MutableRefObject<PixiRef<typeof Sprite> | null>
   watering: boolean
   innerRef: any
 }
@@ -110,7 +110,7 @@ const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering, innerRef 
     zIndex={100}
     ref={innerRef}
   >
-    {phrase && <Text x={50} y={-50} text={phrase} style={textStyles}/>}
+    {phrase && <Text x={50} y={-50} text={phrase} style={textStyles as TextStyle}/>}
     {watering &&  <WateringCan ref={wateringCan}/>}
   </Sprite>
 }

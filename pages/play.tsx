@@ -1,43 +1,74 @@
 import React, { useState, useRef, createRef, useEffect, RefObject } from 'react'
 import { Stage, Container, PixiRef, Sprite, Graphics } from '@inlet/react-pixi'
 import { Sprite as PixiSprite } from 'pixi.js'
+import { generateSlug } from "random-word-slugs";
+
 import LilMan, { RefLilMan } from 'components/LilMan'
 import Tree from 'components/Tree'
 import { Database } from 'utils/types'
 import { keyboard } from 'lib/utils'
 import Layout from 'components/Layout'
 import Gate from 'components/Gate'
+import useUser from 'lib/useUser'
 
-const defaultDatabases = [{name: "Main", branch_count: 1 }, { name: "Production", branch_count: 2 }, { name: 'Developement', branch_count: 10 }]
-const defaultOrganizations = [{ name: 'petunias' }, { name: 'tulips' }]
-const Play: React.FC = () => {
+const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
   const [databases, setDatabases] = useState<Database[]>([])
   const wateringCan = useRef<PixiRef<typeof Sprite>>()
   const lilman = useRef<PixiRef<typeof Sprite>>()
   const [treeRefs, setTreeRefs] = useState<RefObject<PixiSprite>[]>([])
   const [watering, setWatering] = useState(false)
-  const [organizations, setOrganizations] = useState(defaultOrganizations)
+  const [organizations, setOrganizations] = useState<{ name: string }[]>([])
   const [gateRefs, setGateRefs] =  useState<RefObject<PixiSprite>[]>([])
   const [currentOrganization, setCurrentOrganization] = useState<string>()
   const backGate = useRef<PixiRef<typeof Sprite>>()
+
+  const { user }= useUser()
+  console.log(organizations)
+  useEffect(() => {
+    if (user?.planetscaleToken) {
+      fetch(`${apiUrl}/organizations`, { headers: {'Authorization': `${user.planetscaleTokenId}:${user.planetscaleToken}`} }).then((res) => {
+        res.json().then(data => {
+          setGateRefs(data.data.map(() => createRef<PixiRef<typeof Sprite>>()))
+          setOrganizations(data.data)
+        })
+      })
+    }
+  }, [user])
+
+  useEffect(() => {
+    if (user?.planetscaleToken && currentOrganization) {
+      fetch(`${apiUrl}/organizations/${currentOrganization}/databases`, { headers: {'Authorization': `${user.planetscaleTokenId}:${user.planetscaleToken}`} }).then((res) => {
+        res.json().then(data => {
+          setTreeRefs(data.data.map(() => createRef<PixiRef<typeof Sprite>>()))
+          setDatabases(data.data)
+        })
+      })
+    }
+  }, [user, currentOrganization])
+
   useEffect(() => {
     if (watering) {
       treeRefs.forEach((t, i) => {
         if (intersect(t.current as PixiSprite, wateringCan.current as PixiSprite)) {
-          databases[i].branch_count += 1
-          setDatabases([...databases])
+          fetch(`${apiUrl}/organizations/${currentOrganization}/databases/${databases[i].name}/branches`, {
+            method: 'post',
+            body: JSON.stringify({ name: generateSlug() }), 
+            headers: {
+              'Authorization': `${user?.planetscaleTokenId}:${user?.planetscaleToken}`,
+              'Content-Type': 'application/json'
+            } 
+          }).then((res) => {
+            res.json().then(data => {
+              console.log(data.data)
+              
+              databases[i].branches_count += 1
+              setDatabases([...databases])
+            })
+          })          
         }
       })
     }
   }, [watering])
-
-  useEffect(() => {
-    setTreeRefs(databases.map(d => createRef<PixiRef<typeof Sprite>>()))
-  }, [databases])
-
-  useEffect(() => {
-    setGateRefs(organizations.map(d => createRef<PixiRef<typeof Sprite>>()))
-  }, [organizations])
 
   useEffect(() => {
     const water = keyboard("a");
@@ -65,13 +96,13 @@ const Play: React.FC = () => {
       else {
         gateRefs.forEach((g, i) => {
           if (intersect(g.current as PixiSprite, lilman.current as PixiSprite)) {
-            setCurrentOrganization(organizations[i].name)
-            setDatabases(defaultDatabases)
+            console.log("G: ", g.current, ' I: ', i, " Organizations: ", organizations)
+            setCurrentOrganization(organizations[i]?.name)
           }
         })
       }
     }
-  })
+  }, [organizations, currentOrganization])
 
   function intersect(a: PixiSprite, b: PixiSprite) {
     if (!a || !b) {
@@ -98,7 +129,7 @@ const Play: React.FC = () => {
           {!currentOrganization && organizations.map((o,i) => {
             return <Gate ref={gateRefs[i]} key={`tree_${o.name}`} x={i*100} y={300} name={o.name}/>
           })}
-          {currentOrganization && <Gate ref={backGate}  x={300} y={300} name={'Go back'}/>}
+          {currentOrganization && <Gate ref={backGate as React.MutableRefObject<PixiSprite | null>}  x={300} y={300} name={'Go back'}/>}
           <RefLilMan innerRef={lilman} currentUser='Frances' wateringCan={wateringCan} watering={watering} />
         </Container>
       </Stage>
@@ -107,3 +138,11 @@ const Play: React.FC = () => {
 }
 
 export default Play
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      apiUrl: process.env.PLANETSCALE_API_URL
+    }, // will be passed to the page component as props
+  }
+}
