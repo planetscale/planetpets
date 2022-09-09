@@ -1,9 +1,5 @@
 # PlanetPets: An example OAuth application for PlanetScale
 
-<p align="center"><b>Online demo at [https://iron-session-example.vercel.app](https://planetpets.vercel.app/login)</b></p>
-
----
-
 This example OAuth application shows how to use PlanetScale's OAuth system. The entire flow of OAuth within PlanetPets looks like:
 
 | OAuth Step | Within PlanetPets |
