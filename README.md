@@ -1,6 +1,6 @@
 # PlanetPets: An example OAuth application for PlanetScale
 
-<p align="center"><b>Online demo at <a href="https://iron-session-example.vercel.app/(https://planetpets.vercel.app/login)">[https://iron-session-example.vercel.app](https://planetpets.vercel.app/login)</a></b></p>
+<p align="center"><b>Online demo at [https://iron-session-example.vercel.app](https://planetpets.vercel.app/login)</b></p>
 
 ---
 
