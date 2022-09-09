@@ -1,46 +1,15 @@
-# Example application using [`iron-session`](https://github.com/vvo/iron-session)
+# PlanetPets: An example OAuth application for PlanetScale
 
-<p align="center"><b>👀 Online demo at <a href="https://iron-session-example.vercel.app/">https://iron-session-example.vercel.app</a></b></p>
+<p align="center"><b>👀 Online demo at <a href="[https://iron-session-example.vercel.app/](https://planetpets.vercel.app/login)">[https://iron-session-example.vercel.app](https://planetpets.vercel.app/login)</a></b></p>
 
 ---
 
-This example creates an authentication system that uses a **signed and encrypted cookie to store session data**. It relies on [`iron-session`](https://github.com/vvo/iron-session).
+This example OAuth application shows how to use PlanetScale's OAuth system. The entire flow of OAuth within PlanetPets looks like:
 
-It uses current best practices for authentication in the Next.js ecosystem and replicates parts of how the Vercel dashboard is built.
-
-**Features of the example:**
-
-- [API Routes](https://nextjs.org/docs/api-routes/dynamic-api-routes) and [getServerSideProps](https://nextjs.org/docs/basic-features/data-fetching/get-server-side-props) examples.
-- The logged in status is synchronized between browser windows/tabs using **`useUser`** hook and the [`swr`](https://swr.vercel.app/).
-- The layout is based on the user's logged-in/out status.
-- The session data is signed and encrypted in a cookie (this is done automatically by `iron-session`).
-
-[`iron-session`](https://github.com/vvo/iron-session) also provides:
-
-- An Express middleware, which can be used in any Node.js HTTP framework.
-- Multiple encryption keys (passwords) to allow for seamless updates or just password rotation.
-- Full TypeScript support, including session data.
-
-## Deploy your own
-
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/with-iron-session)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-iron-session&project-name=with-iron-session&repository-name=with-iron-session)
-
-## How to use
-
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
-
-```bash
-npx create-next-app --example with-iron-session with-iron-session-app
-```
-
-```bash
-yarn create next-app --example with-iron-session with-iron-session-app
-```
-
-```bash
-pnpm create next-app --example with-iron-session with-iron-session-app
-```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+| OAuth Step | Within PlanetPets |
+| --- | ----------- |
+| User is authenticated within the partner app | User signs into PlanetPets using their Github account |
+| User is directed to sign into their PlanetScale account and authorizes the partner app on their PS account | User is directed to `https://app.planetscale.com/oauth/authorize?client_id=CLIENT_ID&redirect_uri=REDIRECT_URI` from `https://planetpets.vercel.app/` |
+| User is redirected to REDIRECT_URI with `code` as a query parameter | User is redirected to `https://planetpets.vercel.app/api/callback?code=CODE`|
+| Partner application exchanges `code` for an `access token` | [`code` is exchanged for an `access token`](https://github.com/notfelineit/planetpets/blob/main/pages/api/callback.ts#L15-L31) |
+| Partner uses access token to make requests to PlanetScale's public API | PlanetPets requests the users' [organizations](https://github.com/notfelineit/planetpets/blob/main/pages/play.tsx#L28-L36) and [databases](https://github.com/notfelineit/planetpets/blob/main/pages/play.tsx#L39-L47) |
