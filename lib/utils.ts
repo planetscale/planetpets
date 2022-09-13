@@ -56,5 +56,7 @@ export interface Database {
 export const textStyles = {
   fontFamily: 'Courier',
   fontSize: 16,
-  fontWeight: 'bold'
+  fontWeight: 'bold',
+  wordWrap: true,
+  wordWrapWidth: 200
 }

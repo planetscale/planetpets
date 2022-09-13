@@ -22,6 +22,8 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
   const [currentOrganization, setCurrentOrganization] = useState<string>()
   const backGate = useRef<PixiRef<typeof Sprite>>()
 
+  const [phrase, setPhrase] = useState<string>()
+
   const { user }= useUser()
   useEffect(() => {
     if (user?.planetscaleToken) {
@@ -57,10 +59,14 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
               'Content-Type': 'application/json'
             } 
           }).then((res) => {
-            res.json().then(data => {       
-              console.log("DATA ", data)       
-              databases[i].branches_count += 1
-              setDatabases([...databases])
+            res.json().then(data => {      
+              if (data.code == 'unprocessable') {
+                setPhrase(data.message)
+                setTimeout(() => {setPhrase(undefined)}, 1000)
+              } else {
+                databases[i].branches_count += 1
+                setDatabases([...databases])
+              }              
             })
           })          
         }
@@ -127,7 +133,7 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
             return <Gate ref={gateRefs[i]} key={`tree_${o.name}`} x={i*100} y={300} name={o.name}/>
           })}
           {currentOrganization && <Gate ref={backGate as React.MutableRefObject<PixiSprite | null>}  x={300} y={300} name={'Go back'}/>}
-          <RefLilMan innerRef={lilman} currentUser='Frances' wateringCan={wateringCan} watering={watering} />
+          <RefLilMan innerRef={lilman} currentUser='Frances' wateringCan={wateringCan} watering={watering} setPhrase={setPhrase} phrase={phrase}/>
         </Container>
       </Stage>
       <div style={{

@@ -9,13 +9,15 @@ interface Props {
   wateringCan: React.MutableRefObject<PixiRef<typeof Sprite> | null>
   watering: boolean
   innerRef: any
+  setPhrase: (phrase: string | undefined) => void
+  phrase?: string
 }
 
 export const RefLilMan = forwardRef<PixiSprite, any>((props, ref) => {
   return <LilMan innerRef={ref} {...props} />
 })
 
-const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering, innerRef }) => {
+const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering, innerRef, setPhrase, phrase }) => {
   const app = useApp()
   const [x, setX] = useState(app.screen.width / 2)
   const [y, setY] = useState(300)
@@ -23,7 +25,6 @@ const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering, innerRef 
 
   const vx = useRef(0)
   const vy = useRef(0)
-  const [phrase, setPhrase] = useState<string>()
  
   useEffect(() => {
     //Capture the keyboard arrow keys
