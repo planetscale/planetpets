@@ -1,7 +1,11 @@
 # PlanetPets: An example OAuth application for PlanetScale
 
-This example OAuth application shows how to use PlanetScale's OAuth system. The entire flow of OAuth within PlanetPets looks like:
+This example OAuth application shows how to use PlanetScale's OAuth system. 
 
+PlanetPets is a simple app that users "sign in" to using their GitHub account. Afterwards, users are prompted to give PlanetPets access to their PlanetScale account. The user's organizations are then presented as "gardens" where their databases are "trees". Within PlanetPets, users can water their "trees" to grow new branches - this creates a new branch in their database with a randomly generated name.
+
+## OAuth Flow
+The entire flow of OAuth within PlanetPets looks like:
 | OAuth Step | Within PlanetPets |
 | --- | ----------- |
 | 1. User is authenticated within the partner app | User signs into PlanetPets using their Github account |
