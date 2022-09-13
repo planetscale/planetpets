@@ -3,6 +3,7 @@ import useUser from 'lib/useUser'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import fetchJson from 'lib/fetchJson'
+import { User } from 'pages/api/user'
 
 export default function Header() {
   const { user, mutateUser } = useUser()
@@ -22,6 +23,20 @@ export default function Header() {
               <Link href="/login">
                 <a>Login</a>
               </Link>
+            </li>
+          )}
+          {user?.planetscaleToken && (
+            <li>
+              <a
+                onClick={async () => {
+                  const res = await fetchJson<User>('/api/refresh-token', { method: 'POST' })
+                  if (res.planetscaleToken) {
+                    router.reload()
+                  }
+                }}
+              >
+                Refresh Token
+              </a>
             </li>
           )}
           {user?.isLoggedIn === true && (
@@ -58,6 +73,8 @@ export default function Header() {
                   />
                 </span>
               </li>
+              {/* For demo purposes only - don't show your token value in your application */}
+              { user.planetscaleToken && <li>Token: {user.planetscaleToken}</li>}
             </>
           )}
         </ul>
@@ -73,6 +90,7 @@ export default function Header() {
         li {
           margin-right: 1rem;
           display: flex;
+          align-items: center;
         }
 
         li:first-child {
@@ -83,6 +101,7 @@ export default function Header() {
           text-decoration: none;
           display: flex;
           align-items: center;
+          cursor: pointer;
         }
 
         a img {

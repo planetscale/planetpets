@@ -8,6 +8,7 @@ export type User = {
   avatarUrl: string
   planetscaleTokenId?: string
   planetscaleToken?: string
+  refreshToken?: string
 }
 
 async function userRoute(req: NextApiRequest, res: NextApiResponse<User>) {

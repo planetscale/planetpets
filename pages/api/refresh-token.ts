@@ -4,13 +4,13 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import { User } from './user'
 import url from 'url'
 
-async function callbackRoute(req: NextApiRequest, res: NextApiResponse<User>) {
-  const { code } = url.parse(req.url as string, true).query;
+async function refreshTokenRoute(req: NextApiRequest, res: NextApiResponse<User>) {
+  const { refreshToken: oldRefreshToken } = req.session.user || {}
   let planetscaleToken, planetscaleTokenId, refreshToken: string | undefined = undefined
-
-  if (code) {
+  
+  if (oldRefreshToken) {
     const tokenRes = await fetch(
-      `${process.env.PLANETSCALE_API_URL}/organizations/${process.env.ORGANIZATION_NAME}/oauth/applications/${process.env.APP_ID}/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&code=${code}&grant_type=authorization_code&redirect_uri=${process.env.REDIRECT_URI}`,
+      `${process.env.PLANETSCALE_API_URL}/organizations/${process.env.ORGANIZATION_NAME}/oauth/applications/${process.env.APP_ID}/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${oldRefreshToken}`,
       {
         method: 'post',
         headers: new Headers({
@@ -18,6 +18,7 @@ async function callbackRoute(req: NextApiRequest, res: NextApiResponse<User>) {
       })
       }
     )
+
     const token = await tokenRes.json()
     planetscaleToken = token.token
     planetscaleTokenId = token.id
@@ -29,8 +30,7 @@ async function callbackRoute(req: NextApiRequest, res: NextApiResponse<User>) {
     // to get more information on the user if needed
     req.session.user = { ...req.session.user, planetscaleToken, planetscaleTokenId, refreshToken }
     await req.session.save()
-
-    res.redirect(307, '/play')
+    res.json(req.session.user)
   } else {
     res.json({
       isLoggedIn: false,
@@ -40,4 +40,4 @@ async function callbackRoute(req: NextApiRequest, res: NextApiResponse<User>) {
   }
 }
 
-export default withIronSessionApiRoute(callbackRoute, sessionOptions)
+export default withIronSessionApiRoute(refreshTokenRoute, sessionOptions)

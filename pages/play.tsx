@@ -23,7 +23,6 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
   const backGate = useRef<PixiRef<typeof Sprite>>()
 
   const { user }= useUser()
-  console.log(organizations)
   useEffect(() => {
     if (user?.planetscaleToken) {
       fetch(`${apiUrl}/organizations`, { headers: {'Authorization': `${user.planetscaleTokenId}:${user.planetscaleToken}`} }).then((res) => {
@@ -58,9 +57,7 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
               'Content-Type': 'application/json'
             } 
           }).then((res) => {
-            res.json().then(data => {
-              console.log(data.data)
-              
+            res.json().then(data => {              
               databases[i].branches_count += 1
               setDatabases([...databases])
             })
@@ -96,7 +93,6 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
       else {
         gateRefs.forEach((g, i) => {
           if (intersect(g.current as PixiSprite, lilman.current as PixiSprite)) {
-            console.log("G: ", g.current, ' I: ', i, " Organizations: ", organizations)
             setCurrentOrganization(organizations[i]?.name)
           }
         })
