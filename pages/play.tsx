@@ -57,7 +57,8 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
               'Content-Type': 'application/json'
             } 
           }).then((res) => {
-            res.json().then(data => {              
+            res.json().then(data => {       
+              console.log("DATA ", data)       
               databases[i].branches_count += 1
               setDatabases([...databases])
             })
