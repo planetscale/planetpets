@@ -3,7 +3,7 @@ import { Stage, Container, PixiRef, Sprite, Graphics } from '@inlet/react-pixi'
 import { Sprite as PixiSprite } from 'pixi.js'
 import { generateSlug } from "random-word-slugs";
 
-import LilMan, { RefLilMan } from 'components/LilMan'
+import { RefLilMan } from 'components/LilMan'
 import Tree from 'components/Tree'
 import { Database } from 'utils/types'
 import { keyboard } from 'lib/utils'
@@ -129,6 +129,20 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
           <RefLilMan innerRef={lilman} currentUser='Frances' wateringCan={wateringCan} watering={watering} />
         </Container>
       </Stage>
+      <div style={{
+        position: 'absolute',
+        top: 'calc(50% + 300px)',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 500
+    }}>
+          <h3>Controls</h3>
+          <strong>up, down, left, right arrows:</strong> move lil man
+          <br />
+          <strong>e:</strong> enter door
+          <br />
+          <strong>a: </strong>water tree (creates a new branch)
+      </div>
     </Layout>
   )
 }

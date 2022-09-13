@@ -114,5 +114,3 @@ const LilMan: React.FC<Props> = ({ currentUser, wateringCan, watering, innerRef 
     {watering &&  <WateringCan ref={wateringCan}/>}
   </Sprite>
 }
-
-export default LilMan
