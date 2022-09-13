@@ -133,7 +133,7 @@ const Play: React.FC<{ apiUrl: string }> = ({ apiUrl}) => {
             return <Gate ref={gateRefs[i]} key={`tree_${o.name}`} x={i*100} y={300} name={o.name}/>
           })}
           {currentOrganization && <Gate ref={backGate as React.MutableRefObject<PixiSprite | null>}  x={300} y={300} name={'Go back'}/>}
-          <RefLilMan innerRef={lilman} currentUser='Frances' wateringCan={wateringCan} watering={watering} setPhrase={setPhrase} phrase={phrase}/>
+          <RefLilMan innerRef={lilman} currentUser={user?.login} wateringCan={wateringCan} watering={watering} setPhrase={setPhrase} phrase={phrase}/>
         </Container>
       </Stage>
       <div style={{
