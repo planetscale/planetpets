@@ -1,3 +1,10 @@
+<p align="center" width="100%">
+    <img src="/green_lilman@2x.png"> 
+</p>
+<p align="center" width="100%">
+    <img src="/title@2x.png"> 
+</p>
+
 # PlanetPets: An example OAuth application for PlanetScale
 
 This example OAuth application shows how to use PlanetScale's OAuth system. 
