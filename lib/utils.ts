@@ -58,5 +58,5 @@ export const textStyles = {
   fontSize: 16,
   fontWeight: 'bold',
   wordWrap: true,
-  wordWrapWidth: 200
+  wordWrapWidth: 300
 }
