@@ -10,7 +10,7 @@ async function refreshTokenRoute(req: NextApiRequest, res: NextApiResponse<User>
   
   if (oldRefreshToken) {
     const tokenRes = await fetch(
-      `${process.env.PLANETSCALE_API_URL}/organizations/${process.env.ORGANIZATION_NAME}/oauth/applications/${process.env.APP_ID}/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${oldRefreshToken}`,
+      `${process.env.PLANETSCALE_API_URL}/organizations/${process.env.ORGANIZATION_NAME}/oauth-applications/${process.env.APP_ID}/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${oldRefreshToken}`,
       {
         method: 'post',
         headers: new Headers({
@@ -20,6 +20,7 @@ async function refreshTokenRoute(req: NextApiRequest, res: NextApiResponse<User>
     )
 
     const token = await tokenRes.json()
+    console.log(token)
     planetscaleToken = token.token
     planetscaleTokenId = token.id
     refreshToken = token.plain_text_refresh_token
