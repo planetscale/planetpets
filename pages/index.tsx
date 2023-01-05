@@ -28,6 +28,6 @@ export default function Home({ url }: { url: string }) {
 export async function getServerSideProps() {
   const url = `${process.env.PLANETSCALE_APP_URL}/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=${process.env.REDIRECT_URI}`
   return {
-    props: { url }, // will be passed to the page component as props
+    props: { url }, // Will be passed to the Home component as props
   }
 }

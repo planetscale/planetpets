@@ -160,6 +160,6 @@ export async function getServerSideProps() {
   return {
     props: {
       apiUrl: process.env.PLANETSCALE_API_URL
-    }, // will be passed to the page component as props
+    }
   }
 }

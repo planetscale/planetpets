@@ -1,4 +1,4 @@
-import {Key} from '../utils/types'
+import { Key } from '../utils/types'
 export function keyboard(value: string) {
   const key: Key = {
     value: value,
@@ -8,7 +8,7 @@ export function keyboard(value: string) {
     release: undefined
   };
   
-  //The `downHandler`
+  // The `downHandler`
   key.downHandler = (event: KeyboardEvent) => {
     if (event.key === key.value) {
       if (key.isUp && key.press) {
@@ -16,11 +16,10 @@ export function keyboard(value: string) {
       }
       key.isDown = true;
       key.isUp = false;
-      event.preventDefault();
     }
   };
 
-  //The `upHandler`
+  // The `upHandler`
   key.upHandler = (event: KeyboardEvent) => {
     if (event.key === key.value) {
       if (key.isDown && key.release) {
@@ -28,11 +27,10 @@ export function keyboard(value: string) {
       }
       key.isDown = false;
       key.isUp = true;
-      event.preventDefault();
     }
   };
 
-  //Attach event listeners
+  // Attach event listeners
   const downListener = key.downHandler.bind(key);
   const upListener = key.upHandler.bind(key);
   
