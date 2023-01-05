@@ -23,8 +23,8 @@ The entire flow of OAuth within PlanetPets looks like:
 | 6. Partner can refresh the access token using `plain_text_refresh_token` | The refresh token is used to [request a new `access token`](https://github.com/planetscale/planetpets/blob/main/pages/api/refresh-token.ts#L8-L26) |
 
 ## Important Files
-**api/callback.ts**: This contains all the logic needed to exchange an authorization code for an OAuth token, completing the authorization flow
-**api/refresh-token.ts**
+- **api/callback.ts**: This contains all the logic needed to exchange an authorization code for an OAuth token, completing the authorization flow
+- **api/refresh-token.ts**: This contains all the logic needed to refresh an existing OAuth token
 ## Environment Variables
 This demo uses a number of Vercel environment variables that you'll likely need in your OAuth application as well. The most important ones include:
 - your OAuth application ID, client ID, and client secret
