@@ -1,3 +1,5 @@
+// The code in play.tsx is mostly for game play. See api/callback or api/refresh-token for OAuth authorization logic.
+
 import React, { useState, useRef, createRef, useEffect, RefObject } from 'react'
 import { Stage, Container, PixiRef, Sprite, Graphics } from '@inlet/react-pixi'
 import { Sprite as PixiSprite } from 'pixi.js'
