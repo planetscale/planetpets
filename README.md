@@ -22,9 +22,18 @@ The entire flow of OAuth within PlanetPets looks like:
 | 5. Partner uses access token to make requests to PlanetScale's public API | PlanetPets requests the users' [organizations](https://github.com/planetscale/planetpets/blob/main/pages/play.tsx#L28-L36) and [databases](https://github.com/notfelineit/planetpets/blob/main/pages/play.tsx#L39-L47) |
 | 6. Partner can refresh the access token using `plain_text_refresh_token` | The refresh token is used to [request a new `access token`](https://github.com/planetscale/planetpets/blob/main/pages/api/refresh-token.ts#L8-L26) |
 
+## Important Files
+**api/callback.ts**: This contains all the logic needed to exchange an authorization code for an OAuth token, completing the authorization flow
+**api/refresh-token.ts**
 ## Environment Variables
 This demo uses a number of Vercel environment variables that you'll likely need in your OAuth application as well. The most important ones include:
 - your OAuth application ID, client ID, and client secret
 - your service token secret and ID
 - your PlanetScale organization name
 <img width="927" alt="Screen Shot 2023-01-05 at 1 41 20 PM" src="https://user-images.githubusercontent.com/31225471/210885462-862f5ce4-fa49-4349-8a59-1b1f6346dd1c.png">
+
+## Running locally
+You can run this example yourself by cloning this repository, and running:
+```bash
+$ npm run dev
+```
